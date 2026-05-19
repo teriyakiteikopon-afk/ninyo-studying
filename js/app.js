@@ -17,12 +17,44 @@
   const rendered = new Set();
   let notesTimer = null;
 
+  // ── クイズ初期化（答えを隠してボタンを追加） ──
+  function initQuizSlide(slideEl) {
+    if (!slideEl.classList.contains('slide-quiz')) return;
+    if (slideEl.dataset.quizInit) return; // 二重初期化防止
+    slideEl.dataset.quizInit = '1';
+
+    // ✅ マークを含む要素を答えとして特定
+    const allDivs = slideEl.querySelectorAll('div');
+    let answerEl = null;
+    allDivs.forEach(div => {
+      if (div.textContent.trim().startsWith('✅')) answerEl = div;
+    });
+    if (!answerEl) return;
+
+    // 答えを隠す
+    answerEl.classList.add('quiz-answer-box');
+
+    // 「答えを見る」ボタンを挿入
+    const btn = document.createElement('button');
+    btn.className = 'quiz-reveal-btn';
+    btn.textContent = '👀 答えを見る';
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      answerEl.classList.add('revealed');
+      btn.classList.add('hidden');
+    });
+    answerEl.parentNode.insertBefore(btn, answerEl);
+  }
+
   // ── レンダリング ──
   function ensureRendered(index) {
     if (rendered.has(index) || index < 0 || index >= total) return;
     const frag = document.createRange().createContextualFragment(slideFactories[index]());
     stage.appendChild(frag);
     rendered.add(index);
+    // クイズスライドなら初期化
+    const slideEl = stage.querySelectorAll('.slide')[index];
+    if (slideEl) initQuizSlide(slideEl);
   }
 
   // ── スライド移動 ──

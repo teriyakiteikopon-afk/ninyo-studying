@@ -175,6 +175,33 @@ rt {
 .slide-quiz {
   background: var(--c-quiz-bg);
 }
+
+/* ── Quiz: 答え非表示 / 表示ボタン ── */
+.quiz-answer-box {
+  display: none;
+}
+.quiz-answer-box.revealed {
+  display: block;
+}
+.quiz-reveal-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8cqw;
+  background: var(--c-accent);
+  color: #fff;
+  border: none;
+  border-radius: 99px;
+  padding: 1.2cqw 3cqw;
+  font-size: 1.8cqw;
+  font-family: var(--font-body);
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 1cqw;
+  transition: opacity 0.2s, transform 0.1s;
+  align-self: center;
+}
+.quiz-reveal-btn:hover { opacity: 0.85; transform: scale(1.03); }
+.quiz-reveal-btn.hidden { display: none; }
 .quiz-header {
   background: var(--c-quiz-accent);
   color: #fff;
